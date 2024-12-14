@@ -66,7 +66,6 @@ class Card(models.Model):
 
 class SlotInventory(models.Model):
     # Objects of this type will be instantiated as the user populates cards in the form
-    modular_platform = models.ForeignKey(ModularPlatform, on_delete=models.CASCADE, related_name='slots')
     slot_number = models.IntegerField(unique=True)
     card = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, blank=True)
 
