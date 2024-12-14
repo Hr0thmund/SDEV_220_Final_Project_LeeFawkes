@@ -21,6 +21,9 @@ class Platform(models.Model):
     revision = models.CharField(max_length=100, blank=True, null=True)
     is_modular = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = ('brand', 'model', 'revision')
+
     def __str__(self):
         return f"{self.brand} {self.model} (rev: {self.revision})"
 
@@ -29,6 +32,7 @@ class ModularPlatform(Platform):
     num_slots = models.IntegerField(default=0)
     supported_cards = models.ManyToManyField('Card', related_name='supported_by_platforms', blank=True)
     slot_index =  models.IntegerField(default=0)
+    port_index = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Modular: {super().__str__()} with {self.num_slots} slots"
@@ -36,11 +40,13 @@ class ModularPlatform(Platform):
 class FixedPlatform(Platform):
     # For the case in Platform where is_modular == False
     # port_name_template is mandatory, and is populated with a snippet of Jinja2 template.
+    num_ports = models.IntegerField(default=48)
     port_index = models.IntegerField(default=0)
     port_name_template = models.TextField(blank=False, null=False)
+    speed_prefix_map = models.JSONField(default=dict, blank=True)
 
     def __str__(self):
-        return f"Fixed: {super().__str__()} starting port index: {self.port_index}"
+        return f"{super().__str__()} fixed chassis with {self.num_ports} ports"
 
 class Card(models.Model):
     # Inventory item for modular platforms. IE Cisco A9K-20HG-FLEX-SE V04
@@ -51,7 +57,7 @@ class Card(models.Model):
     model = models.CharField(max_length=100)
     revision = models.CharField(max_length=100, blank=True, null=True)
     is_supervisor = models.BooleanField(default=False)
-    port_index = models.IntegerField(default=0) 
+    num_ports = models.IntegerField(default=36)
     port_name_template = models.TextField(blank=False, null=False)
     supported_platforms = models.ManyToManyField(Platform, related_name='supported_cards')
 
@@ -59,6 +65,9 @@ class Card(models.Model):
     # {"100G": "Hu", "10G": "Te"} for Cisco,
     # {"100G": "c", "10G": ""} for Nokia.
     speed_prefix_map = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        unique_together = ('brand', 'model', 'revision')
 
     def __str__(self):
         return f"{self.brand} {self.model} (rev: {self.revision})"
@@ -70,5 +79,5 @@ class SlotInventory(models.Model):
     card = models.ForeignKey(Card, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.modular_platform} Slot {self.slot_number}: {self.card}"
+        return f"Slot {self.slot_number}: {self.card}"
 
