@@ -1,3 +1,4 @@
+# configurator/forms.py
 from django import forms
 from .models import Role, Platform, ModularPlatform, FixedPlatform, Card
 
@@ -19,23 +20,33 @@ class PlatformSelectionForm(forms.Form):
         role = kwargs.pop('role', None)
         super().__init__(*args, **kwargs)
         if role:
+            # Filter platforms based on the selected role
             self.fields['platform'].queryset = role.allowed_platforms.all()
 
-class HostnameLoopbackForm(forms.Form):
+
+class FixedPlatformParamsForm(forms.Form):
     hostname = forms.CharField(max_length=64, required=True)
     loopback = forms.GenericIPAddressField(required=True)
 
+
 class CardSelectionForm(forms.Form):
+    """
+    Dynamically adds a dropdown for each slot in the modular platform.
+    Each dropdown is populated with cards supported by that platform plus a 'no card' option.
+    """
     def __init__(self, *args, **kwargs):
         platform = kwargs.pop('platform', None)
         super().__init__(*args, **kwargs)
         if platform and isinstance(platform, ModularPlatform):
+            # We know how many slots
             for slot_num in range(1, platform.num_slots + 1):
                 card_queryset = platform.supported_cards.all()
+                # Add a 'no card' option. One trick: add a None choice
                 choices = [(None, 'No Card')] + [(c.id, f"{c.brand} {c.model}") for c in card_queryset]
-                self.fields[f"slot_{slot_num}"] = forms.ChoiceField(
+                field = forms.ChoiceField(
                     choices=choices, 
                     required=False, 
                     label=f"Slot {slot_num} Card"
                 )
+                self.fields[f"slot_{slot_num}"] = field
 

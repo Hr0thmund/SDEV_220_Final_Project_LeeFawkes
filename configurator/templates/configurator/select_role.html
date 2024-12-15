@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Select Role</title>
-</head>
+<head><title>Select Role</title></head>
 <body>
-    <h1>Select the Role for the Device</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ role_form.as_p }}
-        <button type="submit" name="select_role">Next</button>
-    </form>
+<h1>Select Role</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Next</button>
+</form>
 </body>
 </html>
 

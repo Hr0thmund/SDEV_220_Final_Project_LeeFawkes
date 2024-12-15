@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head><title>Select Platform</title></head>
+<head><title>Card Selection</title></head>
 <body>
-<h1>Selected Role: {{ role.name }}</h1>
+<h1>Selected Platform: {{ platform.model }}</h1>
+<p>Please select cards for each slot.</p>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><title>Summary</title></head>
+<body>
+<h1>Summary of Selections</h1>
+<p>Role: {{ role.name }}</p>
+<p>Platform: {{ platform.brand }} {{ platform.model }}</p>
+
+{% if slot_assignments %}
+<h2>Slot Assignments</h2>
+<ul>
+{% for slot, card_id in slot_assignments.items %}
+    <li>Slot {{ slot }}: {% if card_id %}{{ card_id }}{% else %}No Card{% endif %}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if hostname and loopback %}
+<p>Hostname: {{ hostname }}</p>
+<p>Loopback: {{ loopback }}</p>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="confirm">Confirm and Generate Config</button>
+    <button type="submit" name="start_over">Start Over</button>
+</form>
+</body>
+</html>
+
