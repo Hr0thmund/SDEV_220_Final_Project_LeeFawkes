@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Platform</title>
+</head>
+<body>
+    <h1>Selected Role: {{ selected_role.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ platform_form.as_p }}
+        <!-- This hidden field stores the selected role -->
+        <input type="hidden" name="role_id" value="{{ selected_role.id }}">
+        <button type="submit" name="select_platform">Next</button>
+    </form>
+</body>
+</html>
