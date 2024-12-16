@@ -6,4 +6,5 @@ manually loaded into the database - there is a script seed_db.py in the project 
 which has been loaded with a few example platforms and cards for test data.
 
 run "python3 seed_db.py" to load db with test data
+
 run "python3 manage.py flush" to clear test data from db
