@@ -87,10 +87,14 @@ def main_form(request):
                 # Render final config
                 return final_config_view(request)
                 # print("User clicked confirm! Hooray!")
-            # If another action (like start over) was implemented, handle here
             if 'start_over' in request.POST:
                 request.session.flush()
                 return redirect('main_form')
+    if current_step == 'generate_config':
+        # We shouldn't be here. Probably stale session data, let's clear and restart.
+        print("The value of current_step is", current_step)
+        request.session.flush()
+        return redirect('main_form')
 
     # GET requests:
     if current_step == 'role':
@@ -141,6 +145,7 @@ def main_form(request):
             'hostname': hostname,
             'loopback': loopback
         })
+        print("The value of current_step is", current_step)
 
 def final_config_view(request):
     role_id = request.session.get('selected_role')
@@ -170,7 +175,7 @@ def final_config_view(request):
     template = jinja_env.get_template('configurator/final_config.j2')
     rendered_config = template.render(context)
 
-    # Clear session after generating final config if desired
+    # Clear session after generating final config
     request.session.flush()
 
     return render(request, 'configurator/final.html', {'rendered_config': rendered_config})
@@ -184,6 +189,11 @@ def final_params(request):
 
     # Determine which form to show based on role
     if request.method == 'POST':
+        if 'start_over' in request.POST:
+            # User clicked the start over button
+            request.session.flush()
+            return redirect('main_form')
+
         if role.name == 'market':
             form = MarketParamsForm(request.POST)
         elif role.name == 'core':
