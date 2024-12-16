@@ -9,8 +9,8 @@
 {% if slot_assignments %}
 <h2>Slot Assignments</h2>
 <ul>
-{% for slot, card_id in slot_assignments.items %}
-    <li>Slot {{ slot }}: {% if card_id %}{{ card_id }}{% else %}No Card{% endif %}</li>
+{% for slot, card_model in slot_assignments.items %}
+    <li>Slot {{ slot }}: {{ card_model }}</li>
 {% endfor %}
 </ul>
 {% endif %}

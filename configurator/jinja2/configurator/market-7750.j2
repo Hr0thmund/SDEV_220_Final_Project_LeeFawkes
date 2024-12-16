@@ -1,0 +1,18 @@
+configure system name {{ hostname }}
+configure router interface system address {{ lo0_ip }}/32
+configure router interface system no shutdown
+configure port {{ uplink_iface }} shutdown
+configure port {{ uplink_iface }} description "uplink port"
+configure port {{ uplink_iface }} ethernet mode network
+configure port {{ uplink_iface }} encap-type dot1q
+configure port {{ uplink_iface }} no shutdown
+configure router interface TO-CORE address {{ uplink_ip_cidr }}
+configure router interface TO-CORE port {{ uplink_iface }}
+configure router interface TO-CORE description "To Core"
+configure router interface TO-CORE no shutdown
+configure router ospf router-id {{ lo0_ip }}
+configure router ospf no shutdown
+configure router ospf area 0.0.0.0 interface "system" no shutdown
+configure router ospf area 0.0.0.0 interface "TO-CORE" no shutdown
+configure router ospf area 0.0.0.0 interface "TO-CORE" interface-type point-to-point
+

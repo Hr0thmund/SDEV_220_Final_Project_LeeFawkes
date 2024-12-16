@@ -39,3 +39,20 @@ class CardSelectionForm(forms.Form):
                     label=f"Slot {slot_num} Card"
                 )
 
+class CoreParamsForm(forms.Form):
+    hostname = forms.CharField(max_length=64, required=True)
+    lo0_ip = forms.GenericIPAddressField(required=True, label="Loopback IP (no CIDR mask)")
+    uplink_iface = forms.CharField(max_length=64, required=True, label="Uplink Interface")
+    uplink_ip_cidr = forms.CharField(max_length=64, required=True, label="Uplink IP (with CIDR)")
+
+class MarketParamsForm(forms.Form):
+    hostname = forms.CharField(max_length=64, required=True)
+    lo0_ip = forms.GenericIPAddressField(required=True, label="Loopback IP (no CIDR mask)")
+    uplink_iface = forms.CharField(max_length=64, required=True, label="Uplink Interface")
+    uplink_ip_cidr = forms.CharField(max_length=64, required=True, label="Uplink IP (with CIDR)")
+
+class EdgeParamsForm(forms.Form):
+    hostname = forms.CharField(max_length=64, required=True)
+    lo0_ip = forms.GenericIPAddressField(required=True, label="Loopback IP (no CIDR mask)")
+    asn = forms.IntegerField(required=True, label="BGP ASN")
+

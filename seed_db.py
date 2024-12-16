@@ -1,3 +1,8 @@
+# run "python3 seed_db.py" to load db with test data
+# run "python3 manage.py flush" to clear test data from db
+# Note: this MVP hasn't implemented functionaly for sub-modules (like MDAs and PICs)
+# It will assume a standard sub-module loadout for cards that feature that.
+
 import os
 import django
 

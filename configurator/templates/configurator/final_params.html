@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head><title>Enter Final Parameters</title></head>
+<body>
+<h1>Final Parameters for {{ role.name }} on {{ platform.brand }} {{ platform.model }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Generate Configuration</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,9 @@
+set system host-name {{ hostname }}
+set interfaces lo0 unit 0 family inet address {{ lo0_ip }}/32
+set interfaces {{ uplink_iface }} description "To Edge"
+set interfaces {{ uplink_iface }} enable
+set interfaces {{ uplink_iface }} unit 0 description "To Edge"
+set interfaces {{ uplink_iface }} unit 0 family inet address {{ uplink_ip_cidr }}
+set protocols ospf area 0.0.0.0 interface lo0.0
+set protocols ospf area 0.0.0.0 interface {{ uplink_iface }} interface-type p2p
+
